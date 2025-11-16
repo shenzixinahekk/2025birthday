@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>生日快乐！</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome -->
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Indie+Flower&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FF6B8B',
+            secondary: '#FFD1DA',
+            accent: '#FFC0D3',
+            gold: '#FFD700',
+            light: '#FFF5F7',
+            dark: '#4A4A4A'
+          },
+          fontFamily: {
+            sans: ['Arial', 'sans-serif'],
+            'comic': ['"Comic Neue"', 'cursive'],
+            'indie': ['"Indie Flower"', 'cursive']
+          },
+          animation: {
+            'float': 'float 3s ease-in-out infinite',
+            'bounce-slow': 'bounce 2s infinite',
+            'spin-slow': 'spin 3s linear infinite',
+            'twinkle': 'twinkle 1.5s ease-in-out infinite alternate'
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-10px)' }
+            },
+            twinkle: {
+              '0%': { opacity: 0.7, transform: 'scale(0.95)' },
+              '100%': { opacity: 1, transform: 'scale(1.05)' }
+            },
+            bounce: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-10px)' }
+            },
+            shine: {
+              to: {
+                background-position: 200% center;
+              }
+            }
+          }
+        }
+      }
+    }
+  </script>
+  
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .text-shadow {
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      }
+      .text-shadow-lg {
+        text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
+      }
+      .bg-blur {
+        backdrop-filter: blur(8px);
+      }
+      .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+      }
+      .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      .photo-card {
+        transition: all 0.3s ease;
+      }
+      .photo-card:hover {
+        transform: translateY(-5px) scale(1.02);
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      }
+      .confetti {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        opacity: 0;
+        animation: confetti-fall 3s ease-in-out infinite;
+      }
+      @keyframes confetti-fall {
+        0% {
+          transform: translateY(-100vh) rotate(0deg);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(100vh) rotate(720deg);
+          opacity: 0;
+        }
+      }
+      .happy-birthday-text {
+        font-family: 'Comic Neue', cursive;
+        font-weight: 700;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        color: #FF6B8B;
+        animation: float 3s ease-in-out infinite;
+        background: linear-gradient(90deg, #FF6B8B, #FFD700, #FF6B8B);
+        background-size: 200% auto;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: float 3s ease-in-out infinite, shine 3s linear infinite;
+      }
+      .happy-birthday-text span {
+        display: inline-block;
+        animation: bounce 2s infinite;
+      }
+      .happy-birthday-text span:nth-child(2n) {
+        animation-delay: 0.2s;
+      }
+      .happy-birthday-text span:nth-child(3n) {
+        animation-delay: 0.4s;
+      }
+      .happy-birthday-text span:nth-child(4n) {
+        animation-delay: 0.6s;
+      }
+    }
+  </style>
+</head>
+<body class="bg-pink-100 min-h-screen overflow-x-hidden">
+  <!-- 背景装饰 -->
+  <div id="confetti-container" class="fixed inset-0 pointer-events-none z-0"></div>
+  
+  <!-- 顶部标题区 -->
+  <header class="relative overflow-hidden">
+    <div class="absolute inset-0 bg-pink-100 z-0"></div>
+    <div class="absolute inset-0 flex items-center justify-center z-10">
+      
+    </div>
+    <div class="relative z-20 container mx-auto px-4 py-16 md:py-24 text-center">
+      <div class="happy-birthday-text text-5xl md:text-7xl lg:text-8xl font-bold text-primary mb-4">
+        <span>生</span><span>日</span><span>快</span><span>乐</span>
+      </div>
+      <h1 class="mt-6 text-3xl md:text-5xl font-bold text-primary font-cursive text-shadow-lg">
+        亲爱的朋友，生日快乐！
+      </h1>
+      
+      
+      
+    </div>
+  </header>
+
+  <!-- 照片展示区 -->
+  <main class="container mx-auto px-4 py-8 relative z-10">
+    <div class="max-w-4xl mx-auto">
+      <div id="photo-container" class="space-y-8">
+        <!-- 照片将通过JavaScript动态添加 -->
+      </div>
+      
+      <!-- 加载提示 -->
+      <div id="loading-indicator" class="flex justify-center items-center py-12">
+        <div class="flex flex-col items-center">
+          <div class="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+          <p class="mt-4 text-primary font-medium">加载更多回忆...</p>
+        </div>
+      </div>
+      
+      
+    </div>
+  </main>
+
+  
+
+  <!-- 照片查看器 -->
+  <section id="photo-viewer" class="fixed inset-0 flex items-center justify-center z-50 opacity-0 pointer-events-none transition-opacity duration-300">
+    <div class="absolute inset-0 bg-black bg-opacity-90 backdrop-blur-sm"></div>
+    <div class="relative max-w-4xl max-h-[90vh] w-full h-full mx-4">
+      <button id="close-viewer" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white bg-opacity-20 text-white flex items-center justify-center hover:bg-opacity-30 transition-all z-10">
+        <i class="fa fa-times text-xl"></i>
+      </button>
+      <div class="relative w-full h-full flex items-center justify-center">
+        <img id="viewer-image" src="" alt="大图预览" class="max-w-full max-h-full object-contain">
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // 照片数据
+    const photos = [
+      {
+        url: "https://github.com/shenzixinahekk/2025birthday/blob/main/1.jpg?raw=true",
+        caption: ""
+      },
+      {
+        url: "https://github.com/shenzixinahekk/2025birthday/blob/main/2.jpg?raw=true",
+        caption: "愿你的生日像这蛋糕一样美丽动人！"
+      },
+      {
+        url: "https://github.com/shenzixinahekk/2025birthday/blob/main/3.jpg?raw=true",
+        caption: "生日快乐！愿你每天都像今天一样开心！"
+      },
+      {
+        url: "https://github.com/shenzixinahekk/2025birthday/blob/main/4.jpg?raw=true",
+        caption: "庆祝的时刻，有你更精彩！"
+      },
+      {
+        url: "https://github.com/shenzixinahekk/2025birthday/blob/main/5.jpg?raw=true",
+        caption: "愿你的生日充满欢乐和笑声！"
+      },
+      {
+        url: "https://github.com/shenzixinahekk/2025birthday/blob/main/6.jpg?raw=true",
+        caption: "生日的装饰，像你的笑容一样灿烂！"
+      },
+      {
+        url: "https://github.com/shenzixinahekk/2025birthday/blob/main/7.jpg?raw=true",
+        caption: "愿你每天都像生日一样被爱包围！"
+      },
+      {
+        url: "https://github.com/shenzixinahekk/2025birthday/blob/main/8.jpg?raw=true",
+        caption: "生日快乐！愿你的梦想像气球一样高飞！"
+      },
+      {
+        url: "https://github.com/shenzixinahekk/2025birthday/blob/main/9.jpg?raw=true",
+        caption: "双层水果蛋糕，愿你的生活丰富多彩！"
+      },
+      {
+        url: "https://github.com/shenzixinahekk/2025birthday/blob/main/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20251116103502_66_81.jpg?raw=true",
+        caption: "可爱的生日蛋糕，愿你永远保持童心！"
+      },
+      {
+        url: "https://github.com/shenzixinahekk/2025birthday/blob/main/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20251116103459_64_81.jpg?raw=true",
+        caption: "温馨的生日场景，愿你被爱包围！"
+      },
+      {
+        url: "https://github.com/shenzixinahekk/2025birthday/blob/main/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20251116103500_65_81.jpg?raw=true",
+        caption: "生日快乐！愿你的每一天都充满阳光！"
+      },
+      {
+        url: "https://github.com/shenzixinahekk/2025birthday/blob/main/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20251116103503_67_81.jpg?raw=true",
+        caption: "蓝莓生日蛋糕，愿你的生活酸甜可口！"
+      },
+      {
+        url: "https://github.com/shenzixinahekk/2025birthday/blob/main/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20251116103504_68_81.jpg?raw=true",
+        caption: "生日派对的欢乐时光，有你更精彩！"
+      },
+      {
+        url: "https://github.com/shenzixinahekk/2025birthday/blob/main/10.jpg?raw=true",
+        caption: "粉色主题生日布置，愿你永远美丽动人！"
+      },
+      {
+        url: "https://github.com/shenzixinahekk/2025birthday/blob/main/11.jpg?raw=true",
+        caption: "玫瑰花皇冠蛋糕，愿你像女王一样闪耀！"
+      },
+      {
+        url: "https://github.com/shenzixinahekk/2025birthday/blob/main/12.jpg?raw=true",
+        caption: "红色玫瑰蛋糕，愿你的爱情甜蜜浪漫！"
+      },
+      {
+        url: "https://github.com/shenzixinahekk/2025birthday/blob/main/13.jpg?raw=true",
+        caption: "独角兽蛋糕，愿你的梦想天马行空！"
+      },
+      {
+        url: "https://github.com/shenzixinahekk/2025birthday/blob/main/14.jpg?raw=true",
+        caption: "梦幻公主蛋糕，愿你永远保持少女心！"
+      },
+      {
+        url: "https://github.com/shenzixinahekk/2025birthday/blob/main/15.jpg?raw=true",
+        caption: "卡通主题派对，愿你永远保持童真！"
+      },
+      {
+        url: "https://github.com/shenzixinahekk/2025birthday/blob/main/16.jpg?raw=true",
+        caption: "彩虹气球派对，愿你的生活五彩斑斓！"
+      },
+      {
+        url: "https://github.com/shenzixinahekk/2025birthday/blob/main/17.jpg?raw=true",
+        caption: "粉色气球装饰，愿你永远年轻美丽！"
+      },
+      {
+        url: "https://github.com/shenzixinahekk/2025birthday/blob/main/18.jpg?raw=true",
+        caption: "美人鱼主题派对，愿你的生活充满奇幻色彩！"
+      },
+      {
+        url: "https://github.com/shenzixinahekk/2025birthday/blob/main/19.jpg?raw=true",
+        caption: "彩色气球祝福，愿你的每一天都充满欢乐！"
+      },
+      {
+        url: "https://github.com/shenzixinahekk/2025birthday/blob/main/20.jpg?raw=true",
+        caption: "生日气球贺卡，愿你的生日充满惊喜！"
+      },
+      {
+        url: "https://github.com/shenzixinahekk/2025birthday/blob/main/21.jpg?raw=true",
+        caption: "彩色气球束，愿你的心情像气球一样轻盈！"
+      },
+      {
+        url: "https://github.com/shenzixinahekk/2025birthday/blob/main/22.jpg?raw=true",
+        caption: "生日印字气球，愿你的愿望都能实现！"
+      }
+    ];
+
+    // 当前显示的照片数量
+    let currentPhotos = 0;
+    // 是否正在加载
+    let isLoading = false;
+
+    // DOM元素
+    const photoContainer = document.getElementById('photo-container');
+    const loadingIndicator = document.getElementById('loading-indicator');
+    const loadMoreBtn = document.getElementById('load-more-btn');
+    const musicToggle = document.getElementById('music-toggle');
+
+    const photoViewer = document.getElementById('photo-viewer');
+    const closeViewer = document.getElementById('close-viewer');
+    const viewerImage = document.getElementById('viewer-image');
+    const confettiContainer = document.getElementById('confetti-container');
+
+    // 初始化页面
+    document.addEventListener('DOMContentLoaded', () => {
+      // 初始加载照片
+      loadPhotos();
+      
+      
+      
+      
+      
+      // 照片查看器
+      closeViewer.addEventListener('click', hidePhotoViewer);
+      
+      // 创建彩屑效果
+      createConfetti();
+      
+      // 初始隐藏加载指示器
+      loadingIndicator.style.display = 'none';
+    });
+
+    // 加载照片
+    function loadPhotos() {
+      if (isLoading || currentPhotos >= photos.length) return;
+      
+      isLoading = true;
+      loadingIndicator.style.display = 'flex';
+      
+      // 模拟加载延迟
+      setTimeout(() => {
+        // 一次性加载所有照片
+        const photosToLoad = photos.slice(currentPhotos);
+        
+        photosToLoad.forEach((photo, index) => {
+          const photoCard = document.createElement('div');
+          photoCard.className = 'photo-card bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-500 opacity-0 translate-y-4';
+          photoCard.innerHTML = `
+            <div class="relative h-64 md:h-80 overflow-hidden cursor-pointer" data-url="${photo.url}">
+              <img src="${photo.url}" alt="生日照片" class="w-full h-full object-cover">
+            </div>
+          `;
+          
+          photoContainer.appendChild(photoCard);
+          
+          // 添加动画效果，每张照片间隔100ms出现
+          setTimeout(() => {
+            photoCard.classList.remove('opacity-0', 'translate-y-4');
+          }, 100 * index);
+          
+          // 添加点击事件
+          const imageContainer = photoCard.querySelector('.relative');
+          imageContainer.addEventListener('click', () => {
+            showPhotoViewer(photo.url);
+          });
+        });
+        
+        currentPhotos = photos.length;
+        isLoading = false;
+        
+        // 隐藏加载指示器
+        loadingIndicator.style.display = 'none';
+      }, 1000);
+    }
+
+    // 处理滚动事件
+    function handleScroll() {
+      if (isLoading || currentPhotos >= photos.length) return;
+      
+      const scrollTop = window.scrollY;
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight;
+      
+      // 当滚动到页面底部附近时加载更多照片
+      if (scrollTop + windowHeight >= documentHeight - 200) {
+        loadPhotos();
+      }
+    }
+
+    
+
+
+
+    // 显示照片查看器
+    function showPhotoViewer(url) {
+      viewerImage.src = url;
+      photoViewer.classList.remove('opacity-0', 'pointer-events-none');
+      document.body.style.overflow = 'hidden';
+    }
+
+    // 隐藏照片查看器
+    function hidePhotoViewer() {
+      photoViewer.classList.add('opacity-0', 'pointer-events-none');
+      document.body.style.overflow = '';
+    }
+
+    // 创建彩屑效果
+    function createConfetti() {
+      const colors = ['#FF6B8B', '#FFD1DA', '#FFC0D3', '#FFD700', '#FF9AA2', '#FFB7B2', '#FFDAC1', '#E2F0CB', '#B5EAD7', '#C7CEEA'];
+      
+      for (let i = 0; i < 100; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.left = `${Math.random() * 100}vw`;
+        confetti.style.animationDelay = `${Math.random() * 5}s`;
+        confetti.style.animationDuration = `${3 + Math.random() * 2}s`;
+        confettiContainer.appendChild(confetti);
+      }
+    }
+  </script>
+</body>
+</html>
